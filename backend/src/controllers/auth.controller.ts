@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import { env } from '../config/env';
 import { User } from '../models/User';
 import { asyncHandler } from '../utils/asyncHandler';
+import { ensureDefaultCategories } from '../utils/defaultCategories';
 
 const signToken = (id: string) =>
   jwt.sign({ id }, env.jwtSecret, { expiresIn: env.jwtExpiresIn } as jwt.SignOptions);
@@ -13,6 +14,7 @@ export const register = asyncHandler(async (req: Request, res: Response) => {
     return res.status(409).json({ message: 'Email already registered' });
   }
   const user = await User.create({ name, email, password });
+  await ensureDefaultCategories(user.id);
   res.status(201).json({
     token: signToken(user.id),
     user: { id: user.id, name: user.name, email: user.email, currency: user.currency },

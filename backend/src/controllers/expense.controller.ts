@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { Expense } from '../models/Expense';
+import { Category } from '../models/Category';
 import { asyncHandler } from '../utils/asyncHandler';
 
 export const getExpenses = asyncHandler(async (req: Request, res: Response) => {
@@ -16,6 +17,9 @@ export const getExpense = asyncHandler(async (req: Request, res: Response) => {
 });
 
 export const createExpense = asyncHandler(async (req: Request, res: Response) => {
+  if (!(await Category.exists({ _id: req.body.category, user: req.userId }))) {
+    return res.status(400).json({ message: 'Invalid category' });
+  }
   const expense = await Expense.create({ ...req.body, user: req.userId });
   res.status(201).json(expense);
 });

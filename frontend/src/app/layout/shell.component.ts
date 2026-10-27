@@ -7,16 +7,18 @@ import { AuthService } from '../core/services/auth.service';
   standalone: true,
   imports: [RouterOutlet, RouterLink, RouterLinkActive],
   template: `
-    <header class="bg-white border-b">
-      <nav class="max-w-5xl mx-auto flex items-center gap-6 p-4">
-        <span class="font-bold text-brand-600 text-lg">SpendWise</span>
-        <a routerLink="/dashboard" routerLinkActive="text-brand-600 font-medium">Dashboard</a>
-        <a routerLink="/expenses" routerLinkActive="text-brand-600 font-medium">Expenses</a>
-        <a routerLink="/categories" routerLinkActive="text-brand-600 font-medium">Categories</a>
-        <button class="ml-auto text-sm text-slate-500 hover:text-red-600" (click)="auth.logout()">Logout</button>
+    <header class="sticky top-0 z-20 border-b border-black/5 bg-white/70 backdrop-blur-xl backdrop-saturate-150">
+      <nav class="mx-auto flex h-12 max-w-5xl items-center gap-8 px-6 text-[13px]">
+        <a routerLink="/dashboard" class="text-[15px] font-semibold tracking-tight">SpendWise</a>
+        <a routerLink="/dashboard" routerLinkActive="!text-apple-text" class="text-apple-muted transition hover:text-apple-text">Dashboard</a>
+        <a routerLink="/expenses" routerLinkActive="!text-apple-text" class="text-apple-muted transition hover:text-apple-text">Expenses</a>
+        <a routerLink="/categories" routerLinkActive="!text-apple-text" class="text-apple-muted transition hover:text-apple-text">Categories</a>
+        <button class="ml-auto text-apple-muted transition hover:text-apple-text" (click)="auth.logout()">Sign out</button>
       </nav>
     </header>
-    <main class="max-w-5xl mx-auto p-4"><router-outlet /></main>
+    <main class="mx-auto max-w-5xl px-6 pb-24 pt-12">
+      <router-outlet />
+    </main>
   `,
 })
 export class ShellComponent {

@@ -25,7 +25,13 @@ API health check: `GET http://localhost:5000/api/health`
 | GET | /api/auth/me | Current user |
 | GET/POST | /api/expenses | List / create expenses |
 | GET/PUT/DELETE | /api/expenses/:id | Read / update / delete |
-| GET/POST | /api/categories | List / create categories |
+| GET/POST | /api/categories | List / create categories (8 defaults seeded per user) |
+| GET | /api/dashboard/summary | Month total, today total, daily average, top category |
 
-## Planned features
-Dashboard & charts, filters/search, budgets, recurring expenses, CSV export.
+## Features
+- Dashboard: total this month, total today, average daily spending, highest spending category
+- Default categories: Food, Transport, Shopping, Bills, Health, Entertainment, Education, Other — plus add your own
+- Apple-inspired UI (SF font stack, translucent nav, soft cards, pill buttons)
+
+## Planned
+Charts, filters/search, budgets, recurring expenses, CSV export.

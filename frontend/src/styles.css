@@ -1,3 +1,26 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  body { @apply bg-apple-gray text-apple-text; letter-spacing: -0.011em; }
+  h1, h2, h3 { letter-spacing: -0.022em; }
+}
+
+@layer components {
+  .card { @apply bg-white rounded-3xl shadow-card p-7 transition duration-300; }
+  .card-hover:hover { @apply shadow-lift -translate-y-0.5; }
+  .eyebrow { @apply text-xs font-semibold uppercase tracking-wider text-apple-muted; }
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-full bg-apple-blue px-5 py-2.5 text-sm font-medium text-white transition hover:bg-apple-blueHover active:scale-[0.98] disabled:opacity-40 disabled:pointer-events-none;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-full bg-black/5 px-5 py-2.5 text-sm font-medium text-apple-text transition hover:bg-black/10 active:scale-[0.98];
+  }
+  .input {
+    @apply w-full rounded-xl border border-apple-border bg-white px-4 py-3 text-[15px] outline-none transition placeholder:text-apple-muted/70 focus:border-apple-blue focus:ring-4 focus:ring-apple-blue/15;
+  }
+  .link { @apply text-apple-blue hover:underline; }
+  .field-label { @apply mb-1.5 block text-sm font-medium text-apple-text; }
+}

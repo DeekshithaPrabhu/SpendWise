@@ -8,14 +8,19 @@ import { AuthService } from '../../../core/services/auth.service';
   standalone: true,
   imports: [ReactiveFormsModule, RouterLink],
   template: `
-    <div class="min-h-screen grid place-items-center">
-      <form [formGroup]="form" (ngSubmit)="submit()" class="bg-white p-8 rounded-xl shadow w-full max-w-sm space-y-4">
-        <h1 class="text-2xl font-bold">Welcome back</h1>
-        @if (error()) { <p class="text-sm text-red-600">{{ error() }}</p> }
-        <input formControlName="email" type="email" placeholder="Email" class="w-full border rounded p-2" />
-        <input formControlName="password" type="password" placeholder="Password" class="w-full border rounded p-2" />
-        <button [disabled]="form.invalid" class="w-full bg-brand-600 text-white rounded p-2 disabled:opacity-50">Login</button>
-        <p class="text-sm text-center">No account? <a routerLink="/register" class="text-brand-600">Register</a></p>
+    <div class="grid min-h-screen place-items-center px-6">
+      <form [formGroup]="form" (ngSubmit)="submit()" class="w-full max-w-sm space-y-5">
+        <div class="mb-8 text-center">
+          <h1 class="text-4xl font-semibold">Sign in to SpendWise</h1>
+          <p class="mt-2 text-apple-muted">Know where every rupee goes.</p>
+        </div>
+        @if (error()) { <p class="rounded-xl bg-red-50 px-4 py-3 text-sm text-apple-red">{{ error() }}</p> }
+        <input formControlName="email" type="email" placeholder="Email" class="input" />
+        <input formControlName="password" type="password" placeholder="Password" class="input" />
+        <button [disabled]="form.invalid" class="btn-primary w-full !py-3">Continue</button>
+        <p class="text-center text-sm text-apple-muted">
+          Don't have an account? <a routerLink="/register" class="link">Create yours now</a>
+        </p>
       </form>
     </div>
   `,
@@ -34,7 +39,7 @@ export class LoginComponent {
   submit() {
     this.auth.login(this.form.getRawValue()).subscribe({
       next: () => this.router.navigate(['/dashboard']),
-      error: (e) => this.error.set(e.error?.message || 'Login failed'),
+      error: (e) => this.error.set(e.error?.message || 'Sign in failed'),
     });
   }
 }

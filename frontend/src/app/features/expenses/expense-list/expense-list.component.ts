@@ -9,23 +9,26 @@ import { Category, Expense } from '../../../core/models';
   standalone: true,
   imports: [RouterLink, CurrencyPipe, DatePipe],
   template: `
-    <div class="flex items-center mb-4">
-      <h1 class="text-2xl font-bold">Expenses</h1>
-      <a routerLink="/expenses/new" class="ml-auto bg-brand-600 text-white px-3 py-2 rounded">+ Add expense</a>
+    <div class="mb-8 flex items-end">
+      <h1 class="text-5xl font-semibold">Expenses</h1>
+      <a routerLink="/expenses/new" class="btn-primary ml-auto">Add expense</a>
     </div>
-    <div class="bg-white rounded-xl shadow divide-y">
+
+    <div class="card !p-2">
       @for (e of expenses(); track e._id) {
-        <div class="flex items-center p-3 gap-4">
+        <div class="flex items-center gap-4 rounded-2xl px-4 py-3.5 transition hover:bg-apple-gray">
+          <span class="grid h-11 w-11 place-items-center rounded-full text-xl"
+                [style.background]="cat(e)?.color + '22'">{{ cat(e)?.icon || '•' }}</span>
           <div class="flex-1">
             <p class="font-medium">{{ e.title }}</p>
-            <p class="text-xs text-slate-500">{{ e.date | date: 'mediumDate' }} · {{ categoryName(e) }}</p>
+            <p class="text-sm text-apple-muted">{{ e.date | date: 'mediumDate' }} · {{ cat(e)?.name }}</p>
           </div>
-          <span class="font-semibold">{{ e.amount | currency: 'INR' }}</span>
-          <a [routerLink]="['/expenses', e._id, 'edit']" class="text-sm text-brand-600">Edit</a>
-          <button (click)="remove(e._id)" class="text-sm text-red-600">Delete</button>
+          <span class="font-semibold tabular-nums">{{ e.amount | currency: 'INR' }}</span>
+          <a [routerLink]="['/expenses', e._id, 'edit']" class="link text-sm">Edit</a>
+          <button (click)="remove(e._id)" class="text-sm text-apple-red hover:underline">Delete</button>
         </div>
       } @empty {
-        <p class="p-6 text-center text-slate-500">No expenses yet.</p>
+        <p class="p-12 text-center text-apple-muted">Nothing here yet. Add your first expense.</p>
       }
     </div>
   `,
@@ -37,5 +40,5 @@ export class ExpenseListComponent implements OnInit {
   ngOnInit() { this.load(); }
   load() { this.service.getAll().subscribe((r) => this.expenses.set(r)); }
   remove(id: string) { this.service.remove(id).subscribe(() => this.load()); }
-  categoryName(e: Expense) { return typeof e.category === 'string' ? '' : (e.category as Category).name; }
+  cat(e: Expense): Category | null { return typeof e.category === 'string' ? null : e.category; }
 }

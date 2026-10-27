@@ -8,15 +8,20 @@ import { AuthService } from '../../../core/services/auth.service';
   standalone: true,
   imports: [ReactiveFormsModule, RouterLink],
   template: `
-    <div class="min-h-screen grid place-items-center">
-      <form [formGroup]="form" (ngSubmit)="submit()" class="bg-white p-8 rounded-xl shadow w-full max-w-sm space-y-4">
-        <h1 class="text-2xl font-bold">Create your account</h1>
-        @if (error()) { <p class="text-sm text-red-600">{{ error() }}</p> }
-        <input formControlName="name" placeholder="Name" class="w-full border rounded p-2" />
-        <input formControlName="email" type="email" placeholder="Email" class="w-full border rounded p-2" />
-        <input formControlName="password" type="password" placeholder="Password (min 6)" class="w-full border rounded p-2" />
-        <button [disabled]="form.invalid" class="w-full bg-brand-600 text-white rounded p-2 disabled:opacity-50">Register</button>
-        <p class="text-sm text-center">Have an account? <a routerLink="/login" class="text-brand-600">Login</a></p>
+    <div class="grid min-h-screen place-items-center px-6">
+      <form [formGroup]="form" (ngSubmit)="submit()" class="w-full max-w-sm space-y-5">
+        <div class="mb-8 text-center">
+          <h1 class="text-4xl font-semibold">Create your account</h1>
+          <p class="mt-2 text-apple-muted">Start tracking in under a minute.</p>
+        </div>
+        @if (error()) { <p class="rounded-xl bg-red-50 px-4 py-3 text-sm text-apple-red">{{ error() }}</p> }
+        <input formControlName="name" placeholder="Name" class="input" />
+        <input formControlName="email" type="email" placeholder="Email" class="input" />
+        <input formControlName="password" type="password" placeholder="Password (min 6 characters)" class="input" />
+        <button [disabled]="form.invalid" class="btn-primary w-full !py-3">Create account</button>
+        <p class="text-center text-sm text-apple-muted">
+          Already have an account? <a routerLink="/login" class="link">Sign in</a>
+        </p>
       </form>
     </div>
   `,

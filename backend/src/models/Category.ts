@@ -5,14 +5,18 @@ export interface ICategory {
   name: string;
   color: string;
   icon?: string;
+  isDefault: boolean;
+  sortOrder: number;
 }
 
 const categorySchema = new Schema<ICategory>(
   {
     user: { type: Schema.Types.ObjectId, ref: 'User', required: true, index: true },
     name: { type: String, required: true, trim: true },
-    color: { type: String, default: '#6366f1' },
+    color: { type: String, default: '#0071e3' },
     icon: String,
+    isDefault: { type: Boolean, default: false },
+    sortOrder: { type: Number, default: 100 },
   },
   { timestamps: true }
 );
