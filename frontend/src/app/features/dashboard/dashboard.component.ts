@@ -50,7 +50,7 @@ import { DashboardSummary } from '../../core/models';
             <p class="mt-2 text-sm text-apple-muted">
               {{ c.total | currency: 'INR' : 'symbol' : '1.0-0' }} · {{ c.share | percent: '1.0-0' }} of this month
             </p>
-            <div class="mt-4 h-1.5 overflow-hidden rounded-full bg-black/5">
+            <div class="mt-4 h-1.5 overflow-hidden rounded-full bg-fill/5">
               <div class="h-full rounded-full" [style.width.%]="c.share * 100" [style.background]="c.color"></div>
             </div>
           } @else {
@@ -66,7 +66,7 @@ import { DashboardSummary } from '../../core/models';
       } @else {
       <div class="grid gap-5 md:grid-cols-2">
         @for (i of [1, 2, 3, 4]; track i) {
-          <div class="card h-44 animate-pulse bg-white/60"></div>
+          <div class="card h-44 animate-pulse bg-surface/60"></div>
         }
       </div>
       }

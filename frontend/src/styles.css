@@ -2,24 +2,48 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Theme tokens (space-separated RGB channels so Tailwind opacity modifiers work) */
+:root {
+  --apple-bg: 245 245 247;
+  --apple-surface: 255 255 255;
+  --apple-text: 29 29 31;
+  --apple-muted: 110 110 115;
+  --apple-border: 210 210 215;
+  --apple-fill: 0 0 0;
+  --apple-blue: 0 113 227;
+  --apple-blue-hover: 0 119 237;
+}
+.dark {
+  --apple-bg: 0 0 0;
+  --apple-surface: 28 28 30;
+  --apple-text: 245 245 247;
+  --apple-muted: 152 152 157;
+  --apple-border: 58 58 60;
+  --apple-fill: 255 255 255;
+  --apple-blue: 41 151 255;
+  --apple-blue-hover: 64 164 255;
+  color-scheme: dark; /* native date pickers, selects, scrollbars */
+}
+
 @layer base {
   html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-  body { @apply bg-apple-gray text-apple-text; letter-spacing: -0.011em; }
+  body { @apply bg-apple-gray text-apple-text transition-colors duration-300; letter-spacing: -0.011em; }
   h1, h2, h3 { letter-spacing: -0.022em; }
 }
 
 @layer components {
-  .card { @apply bg-white rounded-3xl shadow-card p-7 transition duration-300; }
+  .card { @apply bg-surface rounded-3xl shadow-card p-7 transition duration-300; }
+  .dark .card { box-shadow: 0 0 0 1px rgb(255 255 255 / 0.08); }
   .card-hover:hover { @apply shadow-lift -translate-y-0.5; }
   .eyebrow { @apply text-xs font-semibold uppercase tracking-wider text-apple-muted; }
   .btn-primary {
     @apply inline-flex items-center justify-center rounded-full bg-apple-blue px-5 py-2.5 text-sm font-medium text-white transition hover:bg-apple-blueHover active:scale-[0.98] disabled:opacity-40 disabled:pointer-events-none;
   }
   .btn-secondary {
-    @apply inline-flex items-center justify-center rounded-full bg-black/5 px-5 py-2.5 text-sm font-medium text-apple-text transition hover:bg-black/10 active:scale-[0.98];
+    @apply inline-flex items-center justify-center rounded-full bg-fill/5 px-5 py-2.5 text-sm font-medium text-apple-text transition hover:bg-fill/10 active:scale-[0.98];
   }
   .input {
-    @apply w-full rounded-xl border border-apple-border bg-white px-4 py-3 text-[15px] outline-none transition placeholder:text-apple-muted/70 focus:border-apple-blue focus:ring-4 focus:ring-apple-blue/15;
+    @apply w-full rounded-xl border border-apple-border bg-surface px-4 py-3 text-[15px] text-apple-text outline-none transition placeholder:text-apple-muted/70 focus:border-apple-blue focus:ring-4 focus:ring-apple-blue/15;
   }
   .link { @apply text-apple-blue hover:underline; }
   .field-label { @apply mb-1.5 block text-sm font-medium text-apple-text; }

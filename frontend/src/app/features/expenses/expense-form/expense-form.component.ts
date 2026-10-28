@@ -7,6 +7,9 @@ import { Category } from '../../../core/models';
 
 const ADD_NEW = '__new__';
 
+const localDate = (d = new Date()) =>
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+
 @Component({
   selector: 'app-expense-form',
   standalone: true,
@@ -90,7 +93,7 @@ export class ExpenseFormComponent implements OnInit {
     title: ['', Validators.required],
     amount: [0, [Validators.required, Validators.min(0)]],
     category: ['', Validators.required],
-    date: [new Date().toISOString().slice(0, 10), Validators.required],
+    date: [localDate(), Validators.required],
     paymentMethod: ['cash'],
     notes: [''],
   });
@@ -135,7 +138,8 @@ export class ExpenseFormComponent implements OnInit {
   }
 
   submit() {
-    const body = this.form.getRawValue() as any;
+    const raw = this.form.getRawValue();
+    const body = { ...raw, date: new Date(`${raw.date}T12:00:00`).toISOString() } as any;
     const req = this.id ? this.expenses.update(this.id, body) : this.expenses.create(body);
     req.subscribe(() => this.router.navigate(['/expenses']));
   }
