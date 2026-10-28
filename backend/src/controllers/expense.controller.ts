@@ -14,15 +14,17 @@ const startOfLocalDay = (s: string, offset: number) => {
 };
 
 const SORTS: Record<string, Record<string, 1 | -1>> = {
-  newest: { date: -1, createdAt: -1 },
-  oldest: { date: 1, createdAt: 1 },
-  highest: { amount: -1, date: -1 },
-  lowest: { amount: 1, date: -1 },
+  // _id is a tiebreaker so rows never repeat or vanish between pages
+  newest: { date: -1, createdAt: -1, _id: -1 },
+  oldest: { date: 1, createdAt: 1, _id: 1 },
+  highest: { amount: -1, date: -1, _id: -1 },
+  lowest: { amount: 1, date: -1, _id: -1 },
 };
 
 /**
- * GET /api/expenses?search=&category=&month=YYYY-MM&from=YYYY-MM-DD&to=YYYY-MM-DD&sort=&tzOffset=
- * `month` takes precedence over from/to. `to` is inclusive.
+ * GET /api/expenses?search=&category=&month=YYYY-MM&from=YYYY-MM-DD&to=YYYY-MM-DD&sort=&page=&limit=&tzOffset=
+ * `month` takes precedence over from/to. `to` is inclusive. limit defaults to 10 (max 50).
+ * Responds with { data, total, page, limit, totalPages, totalAmount } (totals cover ALL matches, not just this page).
  */
 export const getExpenses = asyncHandler(async (req: Request, res: Response) => {
   const q = req.query as Record<string, string | undefined>;
@@ -48,10 +50,27 @@ export const getExpenses = asyncHandler(async (req: Request, res: Response) => {
     if (Object.keys(range).length) filter.date = range;
   }
 
-  const expenses = await Expense.find(filter)
+  const limit = Math.min(50, Math.max(1, parseInt(q.limit ?? '', 10) || 10));
+
+  // aggregate() doesn't cast ids like find() does, so cast them here
+  const match: Record<string, any> = { ...filter, user: new Types.ObjectId(req.userId) };
+  if (filter.category) match.category = new Types.ObjectId(filter.category);
+
+  const [total, sumAgg] = await Promise.all([
+    Expense.countDocuments(filter),
+    Expense.aggregate([{ $match: match }, { $group: { _id: null, total: { $sum: '$amount' } } }]),
+  ]);
+
+  const totalPages = Math.max(1, Math.ceil(total / limit));
+  const page = Math.min(Math.max(1, parseInt(q.page ?? '', 10) || 1), totalPages);
+
+  const data = await Expense.find(filter)
     .populate('category', 'name color icon')
-    .sort(SORTS[q.sort ?? ''] ?? SORTS.newest);
-  res.json(expenses);
+    .sort(SORTS[q.sort ?? ''] ?? SORTS.newest)
+    .skip((page - 1) * limit)
+    .limit(limit);
+
+  res.json({ data, total, page, limit, totalPages, totalAmount: sumAgg[0]?.total ?? 0 });
 });
 
 export const getExpense = asyncHandler(async (req: Request, res: Response) => {

@@ -34,3 +34,12 @@ export interface DashboardSummary {
     share: number;
   } | null;
 }
+
+export interface Paginated<T> {
+  data: T[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+  totalAmount: number;
+}

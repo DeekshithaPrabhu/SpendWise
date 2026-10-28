@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { Expense } from '../models';
+import { Expense, Paginated } from '../models';
 
 export type ExpenseSort = 'newest' | 'oldest' | 'highest' | 'lowest';
 
@@ -12,6 +12,8 @@ export interface ExpenseQuery {
   from?: string;  // YYYY-MM-DD
   to?: string;    // YYYY-MM-DD (inclusive)
   sort?: ExpenseSort;
+  page?: number;
+  limit?: number;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -22,9 +24,9 @@ export class ExpenseService {
   getAll(query: ExpenseQuery = {}) {
     let params = new HttpParams().set('tzOffset', new Date().getTimezoneOffset());
     for (const [key, value] of Object.entries(query)) {
-      if (value) params = params.set(key, value);
+      if (value) params = params.set(key, String(value));
     }
-    return this.http.get<Expense[]>(this.api, { params });
+    return this.http.get<Paginated<Expense>>(this.api, { params });
   }
   getOne(id: string) { return this.http.get<Expense>(`${this.api}/${id}`); }
   create(body: Partial<Expense>) { return this.http.post<Expense>(this.api, body); }
