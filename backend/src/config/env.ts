@@ -14,4 +14,9 @@ export const env = {
     pass: process.env.SMTP_PASS || '',
     from: process.env.MAIL_FROM || 'SpendWise <no-reply@spendwise.app>',
   },
+  allowedOrigins: (process.env.CLIENT_ORIGIN || process.env.clientUrl || '')
+    .split(',')
+    .map((o) => o.trim().replace(/\/$/, ''))
+    .filter(Boolean),
+  trustProxy: process.env.TRUST_PROXY, // set when deployed behind a proxy (Render, Railway, etc.)
 };
