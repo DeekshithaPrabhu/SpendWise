@@ -2,12 +2,13 @@ import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { ThemeToggleComponent } from '../../../shared/components/theme-toggle.component';
+import { PasswordInputComponent } from '../../../shared/components/password-input.component';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink, ThemeToggleComponent],
+  imports: [ReactiveFormsModule, RouterLink, ThemeToggleComponent, PasswordInputComponent],
   template: `
     <div class="grid min-h-screen place-items-center px-6">
       <app-theme-toggle class="fixed right-4 top-4" />
@@ -17,8 +18,14 @@ import { AuthService } from '../../../core/services/auth.service';
           <p class="mt-2 text-apple-muted">Know where every rupee goes.</p>
         </div>
         @if (error()) { <p class="rounded-xl bg-apple-red/10 px-4 py-3 text-sm text-apple-red">{{ error() }}</p> }
-        <input formControlName="email" type="email" placeholder="Email" class="input" />
-        <input formControlName="password" type="password" placeholder="Password" class="input" />
+        <div>
+          <label for="login-email" class="field-label">Email</label>
+          <input id="login-email" formControlName="email" type="email" placeholder="name@example.com" autocomplete="email" class="input" />
+        </div>
+        <div>
+          <app-password-input label="Password" [control]="form.controls.password" placeholder="Enter your password" autocomplete="current-password" />
+          <div class="mt-2 text-right"><a routerLink="/forgot-password" class="link text-sm">Forgot password?</a></div>
+        </div>
         <button [disabled]="form.invalid" class="btn-primary w-full !py-3">Continue</button>
         <p class="text-center text-sm text-apple-muted">
           Don't have an account? <a routerLink="/register" class="link">Create yours now</a>

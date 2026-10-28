@@ -6,6 +6,8 @@ export interface IUser extends Document {
   email: string;
   password: string;
   currency: string;
+  resetPasswordToken?: string;
+  resetPasswordExpires?: Date;
   comparePassword(candidate: string): Promise<boolean>;
 }
 
@@ -15,6 +17,8 @@ const userSchema = new Schema<IUser>(
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
     password: { type: String, required: true, minlength: 6, select: false },
     currency: { type: String, default: 'INR' },
+    resetPasswordToken: { type: String, select: false },   // SHA-256 hash of the emailed token
+    resetPasswordExpires: { type: Date, select: false },
   },
   { timestamps: true }
 );

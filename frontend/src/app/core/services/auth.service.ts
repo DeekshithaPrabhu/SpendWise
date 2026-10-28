@@ -30,6 +30,16 @@ export class AuthService {
     return this.http.post<AuthResponse>(`${this.api}/register`, body).pipe(tap((r) => this.persist(r)));
   }
 
+  forgotPassword(email: string) {
+    return this.http.post<{ message: string }>(`${this.api}/forgot-password`, { email });
+  }
+
+  resetPassword(token: string, password: string) {
+    return this.http
+      .post<AuthResponse>(`${this.api}/reset-password/${encodeURIComponent(token)}`, { password })
+      .pipe(tap((r) => this.persist(r)));
+  }
+
   logout() {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_KEY);

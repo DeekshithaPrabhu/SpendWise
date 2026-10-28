@@ -2,12 +2,13 @@ import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { ThemeToggleComponent } from '../../../shared/components/theme-toggle.component';
+import { PasswordInputComponent } from '../../../shared/components/password-input.component';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink, ThemeToggleComponent],
+  imports: [ReactiveFormsModule, RouterLink, ThemeToggleComponent, PasswordInputComponent],
   template: `
     <div class="grid min-h-screen place-items-center px-6">
       <app-theme-toggle class="fixed right-4 top-4" />
@@ -17,9 +18,15 @@ import { AuthService } from '../../../core/services/auth.service';
           <p class="mt-2 text-apple-muted">Start tracking in under a minute.</p>
         </div>
         @if (error()) { <p class="rounded-xl bg-apple-red/10 px-4 py-3 text-sm text-apple-red">{{ error() }}</p> }
-        <input formControlName="name" placeholder="Name" class="input" />
-        <input formControlName="email" type="email" placeholder="Email" class="input" />
-        <input formControlName="password" type="password" placeholder="Password (min 6 characters)" class="input" />
+        <div>
+          <label for="reg-name" class="field-label">Name</label>
+          <input id="reg-name" formControlName="name" placeholder="Your name" autocomplete="name" class="input" />
+        </div>
+        <div>
+          <label for="reg-email" class="field-label">Email</label>
+          <input id="reg-email" formControlName="email" type="email" placeholder="name@example.com" autocomplete="email" class="input" />
+        </div>
+        <app-password-input label="Password" [control]="form.controls.password" placeholder="At least 6 characters" autocomplete="new-password" />
         <button [disabled]="form.invalid" class="btn-primary w-full !py-3">Create account</button>
         <p class="text-center text-sm text-apple-muted">
           Already have an account? <a routerLink="/login" class="link">Sign in</a>
