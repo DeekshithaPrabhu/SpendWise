@@ -6,8 +6,8 @@ A MEAN stack (MongoDB, Express, Angular, Node.js) app to track personal expenses
 
 ```
 spendwise/
-├── backend/    Express + TypeScript + Mongoose API (port 5000)
-└── frontend/   Angular (standalone components) + Tailwind CSS (port 4200)
+├── backend/    Express + TypeScript + Mongoose API
+└── frontend/   Angular (standalone components) + Tailwind CSS
 ```
 
 ## Getting started
